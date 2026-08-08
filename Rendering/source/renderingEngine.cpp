@@ -4,11 +4,11 @@ using namespace rendering;
 
 RenderingEngine::RenderingEngine() {
     m_renderingThread = std::thread(&RenderingEngine::start, this);
-
 }
 
 void RenderingEngine::start() {
     // Rendering loop
+    printf("Starting Rendering thread with id: %ld\n", std::this_thread::get_id()._Get_underlying_id());
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -23,13 +23,19 @@ void RenderingEngine::start() {
     }
     glfwMakeContextCurrent(m_window);
 
-
     renderLoop();
+
+    glfwTerminate();
 
 }
 
 void RenderingEngine::renderLoop() {
     while (!glfwWindowShouldClose(m_window)) {
+        if (m_shouldStop.load(std::memory_order_acquire)) {
+            glfwSetWindowShouldClose(m_window, true);
+            continue;
+        }
+        
         // Rendering code here
         glfwSwapBuffers(m_window);
         glfwPollEvents();
@@ -37,8 +43,11 @@ void RenderingEngine::renderLoop() {
 }
 
 void RenderingEngine::close() {
+    m_shouldStop.store(true, std::memory_order_release);
+}
+
+RenderingEngine::~RenderingEngine() {
     if (m_renderingThread.joinable()) {
-        glfwTerminate();
         m_renderingThread.join();
     }
 }

@@ -48,5 +48,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		$<TARGET_FILE_DIR:${PROJECT_NAME}>
 	COMMAND_EXPAND_LISTS
 )
-
-# TODO: Add tests and install targets if needed.
