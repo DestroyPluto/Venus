@@ -1,0 +1,50 @@
+#include "Keyboard.h"
+
+using namespace engine;
+
+Keyboard::Keyboard() {
+    m_keys = (int*)calloc(KEY_LAST + 1, sizeof(int));
+    if (!m_keys) {
+        printf("Failed to initialize key cache!");
+    }
+}
+
+Keyboard::~Keyboard() {
+    free(m_keys);
+}
+
+bool Keyboard::isKeyDown(int key) {
+    std::lock_guard<std::mutex> lock(m_keysMutex);
+    return (m_keys[key] == PRESS || m_keys[key] == REPEAT);
+}
+
+bool Keyboard::getKeyPressed(int key) {
+    std::lock_guard<std::mutex> lock(m_keysMutex);
+    if (m_keys[key] == PRESS) {
+        m_keys[key] = REPEAT;  // Consume the key press
+        return true;
+    }
+    return false;
+}
+
+void Keyboard::setKey(int key, int action) {
+    std::lock_guard<std::mutex> lock(m_keysMutex);
+
+    if (key > KEY_LAST || key < 0) {
+        printf("Key %d is out of range!", key);
+        return;
+    }
+    if (m_keys[key] == PRESS && action != RELEASE) {
+        //we already registered this key as pressed, so it must be a repeat
+        m_keys[key] = REPEAT;
+        return;
+    }
+
+    //we only care if it was pressed or released
+    if (action == UNKNOWN || action == REPEAT)
+        return;
+
+    m_keys[key] = action;
+
+    //HgLogger::logDebug("%d is %d", key, action);
+}

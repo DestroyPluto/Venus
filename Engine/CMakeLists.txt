@@ -11,7 +11,7 @@ endif()
 
 project(Engine)
 
-add_library(Engine SHARED "source/Engine.cpp")
+add_library(Engine SHARED "source/Engine.cpp" "include/Keyboard.h" "source/Keyboard.cpp")
 
 target_include_directories(Engine PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/include
