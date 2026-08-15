@@ -11,7 +11,9 @@ endif()
 
 project(Rendering)
 
-add_library(Rendering SHARED "source/renderingEngine.cpp" )
+add_library(Rendering SHARED 
+"source/renderingEngine.cpp" 
+)
 
 target_include_directories(Rendering PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/include

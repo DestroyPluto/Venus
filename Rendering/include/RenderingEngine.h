@@ -20,7 +20,7 @@ namespace rendering {
         void setKeyCallback(std::function<void(int, int)> callback) { m_keyCallback = std::move(callback); }
         void setMouseCallback(std::function<void(double, double)> callback) { m_mouseCallback = std::move(callback); }
         void setMouseButtonCallback(std::function<void(int, int)> callback) { m_mouseButtonCallback = std::move(callback); }
-
+        bool shouldStop() const { return m_shouldStop.load(std::memory_order_acquire); }
     private:
         void start();
         void renderLoop();

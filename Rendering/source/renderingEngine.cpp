@@ -68,7 +68,7 @@ void RenderingEngine::start() {
 
     renderLoop();
 
-    glfwTerminate();
+    close();
 
 }
 
@@ -90,6 +90,7 @@ void RenderingEngine::close() {
 }
 
 RenderingEngine::~RenderingEngine() {
+    glfwTerminate();
     if (m_renderingThread.joinable()) {
         m_renderingThread.join();
     }

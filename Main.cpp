@@ -30,11 +30,13 @@ public:
         }
         
         while(!shouldExit) {
-        
+            shouldExit = m_renderingEngine->shouldStop();
+
             if (m_keyboard->getKeyPressed(Keyboard::KEY_ESCAPE)) {
                 shouldExit = true;
             }
             //update game
+
         }
 
         printf("running main thread with id: %ld\n", std::this_thread::get_id()._Get_underlying_id());
