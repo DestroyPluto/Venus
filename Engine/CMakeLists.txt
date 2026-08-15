@@ -19,5 +19,3 @@ add_library(Engine SHARED
 target_include_directories(Engine PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-
-find_package(OpenGL REQUIRED)

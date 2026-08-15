@@ -23,5 +23,6 @@ find_package(OpenGL REQUIRED)
 
 target_link_libraries(Rendering PUBLIC 
 	glfw
-	OpenGL::GL 
+	OpenGL::GL
+	Math
 )

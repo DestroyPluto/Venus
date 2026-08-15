@@ -72,17 +72,33 @@ void RenderingEngine::start() {
 
 }
 
+void RenderingEngine::setDirtyEnts(std::vector<RenderingEntity> dirtyEnts) {
+    std::lock_guard<std::mutex> lock(m_RenderingMutex);
+    m_dirtyEnts.insert(m_dirtyEnts.end(), std::make_move_iterator(dirtyEnts.begin()), std::make_move_iterator(dirtyEnts.end()));
+    m_isDirtyEnts.store(true, std::memory_order_release);
+}
+
 void RenderingEngine::renderLoop() {
     while (!glfwWindowShouldClose(m_window)) {
         if (m_shouldStop.load(std::memory_order_acquire)) {
             glfwSetWindowShouldClose(m_window, true);
             continue;
         }
-        
+        if (m_isDirtyEnts.load(std::memory_order_acquire)) {
+            processDirtyEnts();
+        }
         // Rendering code here
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
+}
+
+void RenderingEngine::processDirtyEnts() {
+    std::lock_guard<std::mutex> lock(m_RenderingMutex);
+    for (const auto& entity : m_dirtyEnts) {
+        printf("Entity ID: %d\n", entity.id);
+    }
+    m_dirtyEnts.clear();
 }
 
 void RenderingEngine::close() {

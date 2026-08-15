@@ -31,6 +31,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(Rendering)
 add_subdirectory(Engine)
+add_subdirectory(Math)
 add_subdirectory(${GLFW_DIR})
 
 find_package( OpenGL REQUIRED)
@@ -39,6 +40,7 @@ target_link_libraries(${PROJECT_NAME}
 	glfw
 	Rendering 
 	Engine
+	Math
 )
 
 # Copy all runtime DLL dependencies (including Rendering/Engine) next to Venus.exe

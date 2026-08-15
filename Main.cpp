@@ -19,7 +19,19 @@ public:
             printf("Key callback: key=%d, action=%d\n", key, action);
             m_keyboard->setKey(key, action);
         });
-    };
+        
+        //dummy entity for testing
+        m_entity = RenderingEntity {
+            1,
+            ENTITY_TYPE_GAME_OBJECT,
+            "",
+            {
+                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(0.0f, 0.0f, 0.0f),
+                glm::vec3(1.0f, 1.0f, 1.0f)
+            }
+        };
+    }
 
     void run() {
         bool shouldExit = false;
@@ -29,6 +41,8 @@ public:
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         
+        m_renderingEngine->setDirtyEnts({m_entity});
+
         while(!shouldExit) {
             shouldExit = m_renderingEngine->shouldStop();
 
@@ -46,10 +60,12 @@ public:
 
         printf("rendering thread closed\n");
     }
+
 private:
 
     std::shared_ptr<RenderingEngine> m_renderingEngine;
     std::shared_ptr<Keyboard> m_keyboard;
+    RenderingEntity m_entity;
 
 };
 
