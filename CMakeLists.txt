@@ -50,3 +50,13 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		$<TARGET_FILE_DIR:${PROJECT_NAME}>
 	COMMAND_EXPAND_LISTS
 ) 
+
+# Copy shaders folder to build output: <output>/Shaders
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E make_directory
+		"$<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders"
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		"${CMAKE_SOURCE_DIR}/Rendering/Shaders"
+		"$<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders"
+	COMMENT "Copying shader files to output directory"
+)
