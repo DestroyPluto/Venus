@@ -13,7 +13,7 @@ project(Rendering)
 
 add_library(Rendering SHARED 
 "source/renderingEngine.cpp" 
-)
+"source/RenderCommand.cpp" "source/Geometry.cpp" "source/glad.c" )
 
 target_include_directories(Rendering PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -25,4 +25,4 @@ target_link_libraries(Rendering PUBLIC
 	glfw
 	OpenGL::GL
 	Math
-)
+) 

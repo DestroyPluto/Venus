@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 #include <chrono>
+#include "RenderingStructs.h"
 
 using namespace rendering;
 using namespace engine;

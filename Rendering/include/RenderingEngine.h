@@ -1,30 +1,15 @@
 #pragma once
 #include <thread>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <mutex>
 #include <functional>
 #include <glm/glm.hpp>
+#include <unordered_map>
+#include "RenderCommand.h"
+#include "RenderingStructs.h"
 
 namespace rendering {
-
-    typedef enum entityType {
-        ENTITY_TYPE_GAME_OBJECT,
-        ENTITY_TYPE_UI_OBJECT,
-        ENTITY_TYPE_BACKGROUND_OBJECT
-    } EntityType;
-
-    typedef struct Transform {
-        glm::vec3 position;
-        glm::vec3 rotation;
-        glm::vec3 scale;
-    } Transform;
-
-    typedef struct RenderingEntity {
-        uint32_t id;
-        EntityType type;
-        const char* TexturePath;
-        Transform transform;
-    } RenderingEntity;
 
     class RenderingEngine {
     public:
@@ -48,6 +33,8 @@ namespace rendering {
 
         void processDirtyEnts();
 
+        void updateRenderCommand(const RenderingEntity& entity, RenderCommand& command);
+        void createRenderCommand(const RenderingEntity& entity);
         GLFWwindow* m_window = nullptr;
 
         std::atomic<bool>m_shouldStop{ false };
@@ -62,6 +49,7 @@ namespace rendering {
         static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
         
         std::vector<RenderingEntity> m_dirtyEnts;
+        std::unordered_map<uint32_t, RenderCommand> m_renderedEnts;
         
     };
 }

@@ -58,6 +58,10 @@ void RenderingEngine::start() {
     }
     glfwMakeContextCurrent(m_window);
     
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        return;
+    }
+
     glfwSetKeyCallback(m_window, key_callback);
     glfwSetCursorPosCallback(m_window, mouse_callback);
     glfwSetMouseButtonCallback(m_window, mouse_button_callback);
@@ -97,8 +101,35 @@ void RenderingEngine::processDirtyEnts() {
     std::lock_guard<std::mutex> lock(m_RenderingMutex);
     for (const auto& entity : m_dirtyEnts) {
         printf("Entity ID: %d\n", entity.id);
+        
+        //check if render command exists for this entity
+        auto it = m_renderedEnts.find(entity.id);
+        if (it != m_renderedEnts.end()) {
+            // Update existing render command
+            updateRenderCommand(entity, it->second);
+        } else {
+            createRenderCommand(entity);
+        }
     }
     m_dirtyEnts.clear();
+    m_isDirtyEnts.store(false, std::memory_order_release);
+}
+
+
+void RenderingEngine::updateRenderCommand(const RenderingEntity& entity, RenderCommand& command) {
+    // Update the render command based on the entity's properties
+    // not implemented yet
+}
+
+void RenderingEngine::createRenderCommand(const RenderingEntity& entity) {
+    // Create a new render command for the entity
+    RenderCommand command(entity);
+    auto[it, inserted] = m_renderedEnts.emplace(std::make_pair(entity.id, std::move(command)));
+    
+    if (!inserted) {
+        printf("Failed to insert render command for entity ID: %d\n does it already exist?", entity.id);
+    }
+
 }
 
 void RenderingEngine::close() {
