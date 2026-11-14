@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "RenderCommand.h"
 #include "RenderingStructs.h"
+#include "Shader.h"
 
 namespace rendering {
 
@@ -31,6 +32,9 @@ namespace rendering {
         void start();
         void renderLoop();
 
+        void loadShaders();
+
+
         void processDirtyEnts();
 
         void updateRenderCommand(const RenderingEntity& entity, RenderCommand& command);
@@ -50,6 +54,9 @@ namespace rendering {
         
         std::vector<RenderingEntity> m_dirtyEnts;
         std::unordered_map<uint32_t, RenderCommand> m_renderedEnts;
+
+        //Shaders
+        std::shared_ptr<Shader> m_defaultShader;
         
     };
 }

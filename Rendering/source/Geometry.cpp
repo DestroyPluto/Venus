@@ -36,7 +36,7 @@ void Geometry::drawGeometry() {
         return;
     }
     glBindVertexArray(m_vaoID);
-    glDrawArrays(GL_TRIANGLES, m_vertexCount, 3);
+    glDrawArrays(GL_TRIANGLES, 0, m_vertexCount);
 
     glBindVertexArray(0);
 }

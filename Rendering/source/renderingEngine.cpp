@@ -68,6 +68,8 @@ void RenderingEngine::start() {
 
     glfwSetWindowUserPointer(m_window, this);
 
+    loadShaders();
+
     m_isInitialized.store(true, std::memory_order_release);
 
     renderLoop();
@@ -92,6 +94,11 @@ void RenderingEngine::renderLoop() {
             processDirtyEnts();
         }
         // Rendering code here
+
+        for (auto& [id, command] : m_renderedEnts) {
+            command.execute();
+        }
+
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
@@ -123,13 +130,18 @@ void RenderingEngine::updateRenderCommand(const RenderingEntity& entity, RenderC
 
 void RenderingEngine::createRenderCommand(const RenderingEntity& entity) {
     // Create a new render command for the entity
-    RenderCommand command(entity);
+    RenderCommand command(entity, m_defaultShader);
     auto[it, inserted] = m_renderedEnts.emplace(std::make_pair(entity.id, std::move(command)));
     
     if (!inserted) {
         printf("Failed to insert render command for entity ID: %d\n does it already exist?", entity.id);
     }
 
+}
+
+
+void RenderingEngine::loadShaders() {
+    m_defaultShader = std::make_shared<Shader>("shaders/Basic.vert", "shaders/Basic.frag");
 }
 
 void RenderingEngine::close() {

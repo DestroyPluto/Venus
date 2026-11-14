@@ -5,13 +5,13 @@
 #include <vector>
 #include "Geometry.h"
 #include "RenderingStructs.h"
-
+#include "Shader.h"
 
 namespace rendering {
 
     class RenderCommand {
     public:
-        RenderCommand(const RenderingEntity entity);
+        RenderCommand(const RenderingEntity entity, std::weak_ptr<Shader> shader);
         void execute();
 
     private:
@@ -27,5 +27,8 @@ namespace rendering {
                                                 -0.5f, -0.5f, 1.0f, 
                                                  0.5f,  0.5f, 1.0f, 
                                                  0.5f, -0.5f, 1.0f};
+
+    std::weak_ptr<Shader> m_shader;
     };
+   
 }
