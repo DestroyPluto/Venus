@@ -144,8 +144,7 @@ void RenderingEngine::processDirtyEnts() {
 
 
 void RenderingEngine::updateRenderCommand(const RenderingEntity& entity, RenderCommand& command) {
-    // Update the render command based on the entity's properties
-    // not implemented yet
+    command.update(entity);
 }
 
 void RenderingEngine::createRenderCommand(const RenderingEntity& entity) {
@@ -158,7 +157,6 @@ void RenderingEngine::createRenderCommand(const RenderingEntity& entity) {
     }
 
 }
-
 
 void RenderingEngine::loadShaders() {
     m_defaultShader = std::make_shared<Shader>("shaders/Basic.vert", "shaders/Basic.frag");

@@ -12,7 +12,8 @@ namespace rendering {
 
     class RenderCommand {
     public:
-        RenderCommand(const RenderingEntity entity, std::weak_ptr<Shader> shader);
+        RenderCommand(const RenderingEntity& entity, std::weak_ptr<Shader> shader);
+        void update(const RenderingEntity& entity);
         void execute();
 
     private:

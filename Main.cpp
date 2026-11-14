@@ -54,6 +54,13 @@ public:
             }
             //update game
 
+            //just to test the rendering engine, move the entity up when W is pressed.
+            //TODO: deltaTime
+            if (m_keyboard->isKeyDown(Keyboard::KEY_W)) {
+                m_entity.transform.position.y += 0.05f;
+                m_renderingEngine->setDirtyEnts({ m_entity });
+            }
+            
         }
 
         printf("running main thread with id: %ld\n", std::this_thread::get_id()._Get_underlying_id());
