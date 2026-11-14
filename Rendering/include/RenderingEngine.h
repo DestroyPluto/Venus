@@ -57,6 +57,7 @@ namespace rendering {
 
         //Shaders
         std::shared_ptr<Shader> m_defaultShader;
+        float m_aspectRatio = 1.0f; // Default aspect ratio
         
     };
 }

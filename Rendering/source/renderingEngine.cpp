@@ -53,6 +53,7 @@ void RenderingEngine::start() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     m_window = glfwCreateWindow(800, 600, "Venus", NULL, NULL);
+    m_aspectRatio = 800.0f / 600.0f;
 
     if (m_window == NULL) {
         glfwTerminate();
@@ -96,7 +97,7 @@ void RenderingEngine::renderLoop() {
             processDirtyEnts();
         }
         // Rendering code here
-        m_defaultShader->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 10.0f));
+        m_defaultShader->setUniform("projection", glm::ortho(-m_aspectRatio, m_aspectRatio, -1.0f, 1.0f, -10.0f, 10.0f));
         for (auto& [id, command] : m_renderedEnts) {
             command.execute();
         }
