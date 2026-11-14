@@ -127,7 +127,6 @@ void RenderingEngine::renderLoop() {
 void RenderingEngine::processDirtyEnts() {
     std::lock_guard<std::mutex> lock(m_RenderingMutex);
     for (const auto& entity : m_dirtyEnts) {
-        printf("Entity ID: %d\n", entity.id);
         
         //check if render command exists for this entity
         auto it = m_renderedEnts.find(entity.id);
@@ -136,6 +135,8 @@ void RenderingEngine::processDirtyEnts() {
             updateRenderCommand(entity, it->second);
         } else {
             createRenderCommand(entity);
+            printf("Created Entity with ID: %d\n", entity.id);
+
         }
     }
     m_dirtyEnts.clear();

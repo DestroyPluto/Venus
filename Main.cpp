@@ -3,8 +3,9 @@
 #include "Keyboard.h"
 #include <memory>
 #include <thread>
-#include <chrono>
 #include "RenderingStructs.h"
+#include "TimeManager.h"
+#include <chrono>
 
 using namespace rendering;
 using namespace engine;
@@ -17,7 +18,7 @@ public:
         m_keyboard = std::make_shared<Keyboard>();
 
         m_renderingEngine->setKeyCallback([this](int key, int action) {
-            printf("Key callback: key=%d, action=%d\n", key, action);
+            //printf("Key callback: key=%d, action=%d\n", key, action);
             m_keyboard->setKey(key, action);
         });
         
@@ -43,10 +44,20 @@ public:
         while (!m_renderingEngine->isInitialized()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-        
+
+
         m_renderingEngine->setDirtyEnts({m_entity});
+        std::shared_ptr<TimeManager> updateTime = std::make_shared<TimeManager>();
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto lastTime = std::chrono::high_resolution_clock::now();
 
         while(!shouldExit) {
+            auto currentTime = std::chrono::high_resolution_clock::now();
+            auto delta = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime);
+            lastTime = currentTime;
+            double deltaTime = (double)delta.count() * 0.000000001L;
+            updateTime->setDeltaTime(deltaTime);
+
             shouldExit = m_renderingEngine->shouldStop();
 
             if (m_keyboard->getKeyPressed(Keyboard::KEY_ESCAPE)) {
@@ -54,17 +65,21 @@ public:
             }
             //update game
 
+            float speed = 100.0f;
             //just to test the rendering engine, move the entity up when W is pressed.
-            //TODO: deltaTime
             if (m_keyboard->isKeyDown(Keyboard::KEY_W)) {
-                m_entity.transform.position.y += 0.05f;
+                m_entity.transform.position.y += (speed * updateTime->getDeltaTime());
+                m_renderingEngine->setDirtyEnts({ m_entity });
+            }
+
+            if (m_keyboard->isKeyDown(Keyboard::KEY_S)) {
+                m_entity.transform.position.y -= (speed * updateTime->getDeltaTime());
                 m_renderingEngine->setDirtyEnts({ m_entity });
             }
             
         }
 
-        printf("running main thread with id: %ld\n", std::this_thread::get_id()._Get_underlying_id());
-
+        //printf("running main thread with id: %ld\n", std::this_thread::get_id()._Get_underlying_id());
 
         m_renderingEngine->close();
 
