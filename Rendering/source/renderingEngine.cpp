@@ -39,6 +39,14 @@ void RenderingEngine::mouse_button_callback(GLFWwindow* window, int button, int 
     renderingEngine->m_mouseButtonCallback(button, action);
 }
 
+void RenderingEngine::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    RenderingEngine* renderingEngine = static_cast<RenderingEngine*>(glfwGetWindowUserPointer(window));
+    if (renderingEngine) {
+        renderingEngine->m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+        glViewport(0, 0, width, height);
+    }
+}
+
 RenderingEngine::RenderingEngine() {
     m_renderingThread = std::thread(&RenderingEngine::start, this);
 }
@@ -71,6 +79,8 @@ void RenderingEngine::start() {
 
     glfwSetWindowUserPointer(m_window, this);
 
+    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+
     loadShaders();
 
     m_isInitialized.store(true, std::memory_order_release);
@@ -96,6 +106,10 @@ void RenderingEngine::renderLoop() {
         if (m_isDirtyEnts.load(std::memory_order_acquire)) {
             processDirtyEnts();
         }
+
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         // Rendering code here
         m_defaultShader->setUniform("projection", glm::ortho(-m_aspectRatio, m_aspectRatio, -1.0f, 1.0f, -10.0f, 10.0f));
         for (auto& [id, command] : m_renderedEnts) {

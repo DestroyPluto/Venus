@@ -51,7 +51,8 @@ namespace rendering {
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
         static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-        
+        static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
         std::vector<RenderingEntity> m_dirtyEnts;
         std::unordered_map<uint32_t, RenderCommand> m_renderedEnts;
 
