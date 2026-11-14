@@ -1,6 +1,7 @@
 #include "RenderCommand.h"
 #include "Geometry.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Shader.h"
 
 using namespace rendering;
 
@@ -18,6 +19,12 @@ RenderCommand::RenderCommand(const RenderingEntity entity, std::weak_ptr<Shader>
     m_geometry = std::make_unique<Geometry>(m_globalID);
     //TODO make it so you can pass in any vertex data.
     m_geometry->addAttribute(0, m_DefaultVertexData, 3);
+    
+    //only set them when needed. 
+    if (auto shader = m_shader.lock()) {
+        shader->setUniform("colour", entity.colour);
+        shader->setUniform("model", m_modelMatrix);
+    }
 
 }
 
@@ -25,7 +32,6 @@ void RenderCommand::execute() {
     //only render if there is a valid shader to use.
     if (auto shader = m_shader.lock()) {
         shader->Bind();
-        shader->setUniform("model", m_modelMatrix);
         m_geometry->drawGeometry();
         shader->Unbind();
     }

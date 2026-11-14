@@ -26,11 +26,13 @@ public:
             1,
             ENTITY_TYPE_GAME_OBJECT,
             "",
+            glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
             {
                 glm::vec3(0.5f, 0.0f, 0.0f),
                 glm::vec3(0.0f, 0.0f, 45.0f),
                 glm::vec3(100.0f, 100.0f, 1.0f)
             }
+            
         };
     }
 

@@ -107,11 +107,14 @@ void RenderingEngine::renderLoop() {
             processDirtyEnts();
         }
 
+        glm::mat4 projection = glm::ortho(-m_aspectRatio * m_UIScale, m_aspectRatio * m_UIScale, -m_UIScale, m_UIScale, -10.0f, 10.0f);
+        //set global shader uniforms
+        m_defaultShader->setUniform("projection", projection);
+
+        //Render the scene
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Rendering code here
-        m_defaultShader->setUniform("projection", glm::ortho(-m_aspectRatio * m_UIScale, m_aspectRatio * m_UIScale, -m_UIScale, m_UIScale, -10.0f, 10.0f));
+     
         for (auto& [id, command] : m_renderedEnts) {
             command.execute();
         }

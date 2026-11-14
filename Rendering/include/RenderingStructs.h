@@ -20,6 +20,7 @@ namespace rendering{
         uint32_t id;
         EntityType type;
         const char* TexturePath;
+        glm::vec4 colour;
         Transform transform;
     } RenderingEntity;
 

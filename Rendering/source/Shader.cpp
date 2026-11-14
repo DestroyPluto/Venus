@@ -122,6 +122,12 @@ void Shader::setUniform(const char* name, glm::vec3 value) const {
 }
 
 template<>
+void Shader::setUniform(const char* name, glm::vec4 value) const {
+    int location = glGetUniformLocation(m_id, name);
+    glProgramUniform4fv(m_id, location, 1, glm::value_ptr(value));
+}
+
+template<>
 void Shader::setUniform(const char* name, glm::mat3 value) const {
     int location = glGetUniformLocation(m_id, name);
     glProgramUniformMatrix3fv(m_id, location, 1, GL_FALSE, glm::value_ptr(value));
