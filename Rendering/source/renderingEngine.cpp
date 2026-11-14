@@ -111,7 +111,7 @@ void RenderingEngine::renderLoop() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Rendering code here
-        m_defaultShader->setUniform("projection", glm::ortho(-m_aspectRatio, m_aspectRatio, -1.0f, 1.0f, -10.0f, 10.0f));
+        m_defaultShader->setUniform("projection", glm::ortho(-m_aspectRatio * m_UIScale, m_aspectRatio * m_UIScale, -m_UIScale, m_UIScale, -10.0f, 10.0f));
         for (auto& [id, command] : m_renderedEnts) {
             command.execute();
         }
