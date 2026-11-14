@@ -6,6 +6,7 @@
 #include "Geometry.h"
 #include "RenderingStructs.h"
 #include "Shader.h"
+#include <glm/matrix.hpp>
 
 namespace rendering {
 
@@ -20,15 +21,17 @@ namespace rendering {
         //geometry?
         std::unique_ptr<Geometry> m_geometry;
         //just a square for now.
-        std::vector<float> m_DefaultVertexData {-0.5f, -0.5f, 1.0f,
-                                                -0.5f,  0.5f, 1.0f, 
-                                                 0.5f,  0.5f, 1.0f, 
+        std::vector<float> m_DefaultVertexData {-0.5f, -0.5f, 0.0f,
+                                                -0.5f,  0.5f, 0.0f, 
+                                                 0.5f,  0.5f, 0.0f, 
         
-                                                -0.5f, -0.5f, 1.0f, 
-                                                 0.5f,  0.5f, 1.0f, 
-                                                 0.5f, -0.5f, 1.0f};
+                                                -0.5f, -0.5f, 0.0f, 
+                                                 0.5f,  0.5f, 0.0f, 
+                                                 0.5f, -0.5f, 0.0f};
 
     std::weak_ptr<Shader> m_shader;
+
+
+
     };
-   
 }

@@ -1,5 +1,7 @@
 #include "RenderingEngine.h"
 #include <cassert>
+#include "glm/gtc/matrix_transform.hpp"
+
 
 using namespace rendering;
 
@@ -46,8 +48,8 @@ void RenderingEngine::start() {
     printf("Starting Rendering thread with id: %ld\n", std::this_thread::get_id()._Get_underlying_id());
 
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     m_window = glfwCreateWindow(800, 600, "Venus", NULL, NULL);
@@ -94,7 +96,7 @@ void RenderingEngine::renderLoop() {
             processDirtyEnts();
         }
         // Rendering code here
-
+        m_defaultShader->setUniform("projection", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 10.0f));
         for (auto& [id, command] : m_renderedEnts) {
             command.execute();
         }

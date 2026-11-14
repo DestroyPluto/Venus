@@ -11,12 +11,14 @@ RenderCommand::RenderCommand(const RenderingEntity entity, std::weak_ptr<Shader>
     m_geometry = std::make_unique<Geometry>(m_globalID);
     //TODO make it so you can pass in any vertex data.
     m_geometry->addAttribute(0, m_DefaultVertexData, 3);
+
 }
 
 void RenderCommand::execute() {
     //only render if there is a valid shader to use.
     if (auto shader = m_shader.lock()) {
         shader->Bind();
+        shader->setUniform("model", m_modelMatrix);
         m_geometry->drawGeometry();
         shader->Unbind();
     }

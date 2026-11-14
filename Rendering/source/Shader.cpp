@@ -4,6 +4,9 @@
 #include <sstream>
 #include <cstdio>
 #include <glad/glad.h>
+#include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace rendering;
 
@@ -97,4 +100,35 @@ void Shader::Bind()
 void Shader::Unbind() {
     //unbind the shader program
     glUseProgram(0);
+}
+
+template<>
+void Shader::setUniform(const char* name, float value) const
+{
+    int location = glGetUniformLocation(m_id, name);
+    glProgramUniform1f(m_id, location, value);
+}
+
+template<>
+void Shader::setUniform(const char* name, int value) const {
+    int location = glGetUniformLocation(m_id, name);
+    glProgramUniform1i(m_id, location, value);
+}
+
+template<>
+void Shader::setUniform(const char* name, glm::vec3 value) const {
+    int location = glGetUniformLocation(m_id, name);
+    glProgramUniform3fv(m_id, location, 1, glm::value_ptr(value));
+}
+
+template<>
+void Shader::setUniform(const char* name, glm::mat3 value) const {
+    int location = glGetUniformLocation(m_id, name);
+    glProgramUniformMatrix3fv(m_id, location, 1, GL_FALSE, glm::value_ptr(value));
+}
+
+template<>
+void Shader::setUniform(const char* name, glm::mat4 value) const{
+    int location = glGetUniformLocation(m_id, name);
+    glProgramUniformMatrix4fv(m_id, location, 1, GL_FALSE, glm::value_ptr(value));
 }
